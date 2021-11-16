@@ -2,8 +2,14 @@ const { request, response } = require('express')
 const express = require('express')
 
 const app = express()
+var morgan = require('morgan')
+
+morgan.token('body', req => {
+    return JSON.stringify(req.body)
+  })
 
 app.use(express.json());
+app.use(morgan(':method :url :body'))
 
 let persons = 
 [
@@ -81,7 +87,7 @@ const generateId = () => {
 app.post('/api/persons', (request, response) => {
     const body = request.body
     const matched = persons.find(x => x.name == body.name)
-    console.log(request.body)
+    // // console.log(request.body)
 
     if (!body.name || !body.number) {
         return response.status(400).json({ 
